@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
+    <!-- https://fonts.google.com/specimen/Roboto -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome.min.css') }}">
+    <!-- https://fontawesome.com/ -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <!-- https://getbootstrap.com/ -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/templatemo-style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css"/>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <!--
+	Product Admin CSS Template
+	https://templatemo.com/tm-524-product-admin
+	-->
+<script>
+$(document).ready(function()
+{
+    $.datepicker.setDefaults({
+        dateFormat: 'yy-mm-dd'
+    });
+    $( function() {
+    $( "#From" ).datepicker({ minDate: "-1Y -9M -1D", maxDate: "-10M -2D" });
+    $( "#to" ).datepicker({ minDate: "-1Y -8M -1D", maxDate: "-8M -2D" });
+  } );
+    $('#range').click(function(){
+        var From = $('#From').val();
+        var to = $('#to').val();
+        if(From != '' && to != '')
+        {
+            $.ajax({
+                url:"/range",
+                method:"POST",
+                data:{From:From, to:to},
+                success:function(data)
+                {
+                    $('#purchase_order').html(data);
+                    $('#purchase_order').append(data.htmlresponse);
+
+                }
+            });
+        }
+        else
+        {
+            alert("Please Select the Date");
+        }
+    });
+});
+</script>
+</head>
+<body id="reportsPage">
+
+    <div class="" id="home">
+        <nav class="navbar navbar-expand-xl">
+            <div class="container h-100">
+                <a class="navbar-brand" href="{{ url_for('new') }}">
+                    <h1 class="tm-site-title mb-0">Graphic data</h1>
+                </a>
+                <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-bars tm-nav-icon"></i>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mx-auto h-100">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Dashboard
+                                <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </nav>
+        {% block content %}
+        {% endblock %}
+        <footer class="tm-footer row tm-mt-small">
+            <div class="col-12 font-weight-light">
+                <p class="text-center text-white mb-0 px-4 small">
+                    Copyright &copy; <b>2021</b> All rights reserved.
+
+                    Design: <a rel="nofollow noopener" href="https://evoplay.com/" class="tm-footer-link">EvoPlay</a>
+                </p>
+            </div>
+        </footer>
+    </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+
+
+
+    <script src="{{ url_for('static', filename='js/moment.min.js') }}"></script>
+    <!-- https://momentjs.com/ -->
+    <script src="{{ url_for('static', filename='js/Chart.min.js') }}"></script>
+    <!-- http://www.chartjs.org/docs/latest/ -->
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <!-- https://getbootstrap.com/ -->
+{#    <script src="{{ url_for('static', filename='js/tooplate-scripts.js') }}"></script>#}
+    <script>
+        Chart.defaults.global.defaultFontColor = 'white';
+        let ctxLine,
+            ctxBar,
+            ctxPie,
+            optionsLine,
+            optionsBar,
+            optionsPie,
+            configLine,
+            configBar,
+            configPie,
+            lineChart;
+            pieChart;
+        // DOM is ready
+        $(function () {
+            drawLineChart(); // Line Chart
+            drawPieChart(); // Pie Chart
+
+            $(window).resize(function () {
+                updateLineChart();
+            });
+        })
+        /* Get all inputs */
+const inputs = document.querySelectorAll('input');
+
+    </script>
+</body>
+</html>

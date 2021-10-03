@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% block titile %}Home Page{% endblock %}
+{% block content %}
+
+<div class="container">
+
+        <form action="/new/" method="POST">
+            <div class="row mt-5 mb-5">
+        <div class="col-md-2 text-white placeholder-white">
+            <input type="text" name="From" id="From" class="form-control" placeholder="From Date"/>
+        </div>
+        <div class="col-md-2 text-white">
+            <input type="text" name="to" id="to" class="form-control" placeholder="To Date"/>
+        </div>
+        <div class="col-md-8">
+            <input type="submit" name="send" id="send" value="Range" class="btn btn-success"/>
+        </div>
+        <div class="clearfix"></div>
+        <br/>
+                </div>
+        </form>
+
+    <!-- row -->
+<div id="purchase_order">
+    <div class="row tm-content-row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 tm-block-col">
+            <div class="tm-bg-primary-dark tm-block">
+{#                <h2 class="tm-block-title">Latest Hits</h2>#}
+                <canvas id="lineChart"></canvas>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 tm-block-col">
+            <div class="tm-bg-primary-dark tm-block tm-block-taller">
+{#                <h2 class="tm-block-title">Storage Information</h2>#}
+                <div id="pieChartContainer">
+                    <canvas id="pieChart" class="chartjs-render-monitor" width="200" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+    const width_threshold = 480;
+
+function drawLineChart() {
+  if ($("#lineChart").length) {
+    ctxLine = document.getElementById("lineChart").getContext("2d");
+    optionsLine = {
+      scales: {
+        yAxes: [
+          {
+            scaleLabel: {
+              display: true,
+              labelString: "Target"
+            }
+          }
+        ]
+      }
+    };
+
+    // Set aspect ratio based on window width
+    optionsLine.maintainAspectRatio =
+      $(window).width() < width_threshold ? false : true;
+
+    configLine = {
+      type: "line",
+      data: {
+        labels: [
+            {% for month in monthes %}
+
+                "{{ month }}",
+
+            {% endfor %}
+
+        ],
+        datasets: [
+            {% for obj in cumsum_list %}
+          {
+            label: "{{ obj[0] }}",
+            data: [
+                {% for val in obj[1] %}
+                    {{ val }},
+                {% endfor %}
+            ],
+            fill: false,
+            borderColor: "{{ obj[2] }}",
+            cubicInterpolationMode: "monotone",
+            pointRadius: 5,
+            pointHitRadius: 100,
+            tension: 2,
+          },
+            {% endfor %}
+        ]
+      },
+      options: optionsLine
+    };
+
+    lineChart = new Chart(ctxLine, configLine);
+  }
+}
+
+function drawPieChart() {
+  if ($("#pieChart").length) {
+    var chartHeight = 500;
+
+    $("#pieChartContainer").css("height", chartHeight + "px");
+
+    ctxPie = document.getElementById("pieChart").getContext("2d");
+
+    optionsPie = {
+      responsive: true,
+      maintainAspectRatio: false,
+      layout: {
+        padding: {
+          left: 10,
+          right: 10,
+          top: 10,
+          bottom: 10
+        }
+      },
+      legend: {
+        position: "top"
+      }
+    };
+
+    configPie = {
+      type: "pie",
+      data: {
+
+
+       datasets: [
+          {
+            data: [
+                {% for value in pie_values %}
+                    {{ value }},
+                {% endfor %}
+               ],
+            backgroundColor: [
+                {% for color in pie_colors %}
+                "{{ color }}",
+                {% endfor %}
+
+            ],
+            label: "Storage"
+          }
+        ],
+        labels: [
+            {% for city in cities %}
+                "{{ city }}",
+            {% endfor %}
+        ]
+
+
+      },
+      options: optionsPie
+    };
+
+    pieChart = new Chart(ctxPie, configPie);
+  }
+}
+
+function updateLineChart() {
+  if (lineChart) {
+    lineChart.options = optionsLine;
+    lineChart.update();
+  }
+}
+
+        </script>
+</div>
+</div>
+
+
+
+{% endblock %}
