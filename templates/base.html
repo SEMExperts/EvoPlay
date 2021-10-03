@@ -27,9 +27,31 @@ $(document).ready(function()
         dateFormat: 'yy-mm-dd'
     });
     $( function() {
-    $( "#From" ).datepicker({ minDate: "-1Y -9M -1D", maxDate: "-10M -2D" });
-    $( "#to" ).datepicker({ minDate: "-1Y -8M -1D", maxDate: "-8M -2D" });
+    $( "#From" ).datepicker({ minDate: "-1Y -9M -2D", maxDate: "-10M -2D" });
+    $( "#to" ).datepicker({ minDate: "-1Y -8M -1D", maxDate: "-9M -3D" });
   } );
+    $('#range').click(function(){
+        var From = $('#From').val();
+        var to = $('#to').val();
+        if(From != '' && to != '')
+        {
+            $.ajax({
+                url:"/range",
+                method:"POST",
+                data:{From:From, to:to},
+                success:function(data)
+                {
+                    $('#purchase_order').html(data);
+                    $('#purchase_order').append(data.htmlresponse);
+
+                }
+            });
+        }
+        else
+        {
+            alert("Please Select the Date");
+        }
+    });
     $('#range').click(function(){
         var From = $('#From').val();
         var to = $('#to').val();

@@ -8,7 +8,7 @@ app = Flask(__name__)
 db = SQLite()
 
 
-@app.route('/')
+@app.route('/new/')
 def home():
     id_dict = db.city_id('2020-01-01', '2020-12-28')
 
@@ -52,7 +52,7 @@ def home():
                            monthes=monthes,
                            colors=colors)
 
-@app.route('/new/', methods=["POST","GET"])
+@app.route('/', methods=["POST","GET"])
 def new():
     if request.method == 'POST':
         From = request.form.get("From")
@@ -122,6 +122,7 @@ def range():
         print(to)
         id_dict = db.city_id(From, to)
         # Get cities list
+        cities = list(id_dict.keys())
 
         # Get color list
         colors = [
